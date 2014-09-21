@@ -1,0 +1,26 @@
+#load data from a known directory
+setwd("~/Downloads/Coursera/EDA/ExData_Plotting2-master/ExData_Plotting2-master/ExData_Plotting2/")
+unzip("./data/exdata-data-NEI_data.zip", exdir = "./data/")
+# Check if both the data files exist. If not, load them.
+if (!"neiData" %in% ls()) {
+    neiData <- readRDS("./data/summarySCC_PM25.rds")
+}
+if (!"sccData" %in% ls()) {
+    sccData <- readRDS("./data/Source_Classification_Code.rds")
+}
+head(neiData)
+head(sccData)
+dim(neiData) 
+dim(sccData) 
+
+
+par("mar"=c(5.1, 4.5, 4.1, 2.1))
+totalEmissions <- aggregate(neiData$Emissions, list(neiData$year), FUN = "sum")
+#plotting a base plotting X-Y plot on screen and then copying to png
+plot(totalEmissions, type = "l", xlab = "Year", 
+     main = "Total Emissions in the United States from 1999 to 2008", 
+     ylab = expression('Total PM'[2.5]*" Emission"))
+dev.copy(png, file="./figure/plot1.png", width = 480, height = 480)
+
+dev.off()
+
